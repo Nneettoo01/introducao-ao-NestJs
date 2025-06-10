@@ -1,26 +1,21 @@
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { UserService } from './users.service';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Param,
+  Put,
+  Delete,
+} from '@nestjs/common';
+import { UsersService } from './users.service';
+import { User } from '@prisma/client';
 
-@Controller('/users')
-export class UsersControllers {
-  private userService: UserService;
+@Controller('users')
+export class UsersController {
+  constructor(private readonly usersService: UsersService) {}
 
-  constructor(u: UserService) {
-    this.userService = u;
-  }
-
-  @Get()
-  findAllUsers() {
-    return this.userService.findAll();
-  }
-
-  @Get(':id')
-  findOneUser(@Param(':id') id: string) {
-    return this.userService.findOne(parseInt(id));
-  }
-
-  @Post()
-  createUser(@Body() user: { name: string; email: string }) {
-    return this.userService.create(user);
+  @Post('create')
+  create(@Body() data: any) {
+    return this.usersService.create(data);
   }
 }
