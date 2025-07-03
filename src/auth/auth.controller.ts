@@ -6,6 +6,8 @@ import {
   ApiConflictResponse,
   ApiCreatedResponse,
 } from '@nestjs/swagger';
+import { LoginDto } from './dto/login.dto';
+import { LoginResponseDto } from './dto/login-response.dto';
 
 @Controller('auth')
 export class AuthController {
@@ -20,5 +22,11 @@ export class AuthController {
   @Post('register')
   async register(@Body() userData: RegisterUserDto) {
     return this.authService.registerUser(userData);
+  }
+
+  @ApiBody({ type: LoginDto })
+  @Post('login')
+  async login(@Body() credentials: LoginDto): Promise<LoginResponseDto> {
+    return this.authService.login(credentials);
   }
 }

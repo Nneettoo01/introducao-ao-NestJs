@@ -13,6 +13,13 @@ async function bootstrap() {
     )
     .setVersion('1.0')
     .addTag('users')
+    .addBearerAuth({
+      type: 'http',
+      scheme: 'bearer',
+      bearerFormat: 'JWT',
+      name: 'Authorization',
+      in: 'header',
+    }) // Esquema JWT Bearer
     .build(); // Construir a configuração
 
   const document = SwaggerModule.createDocument(app, config);

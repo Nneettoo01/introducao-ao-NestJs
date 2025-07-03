@@ -1,5 +1,6 @@
-import {} from 'class-validator';
+import { IsString } from 'class-validator';
 
 export class LoginResponseDto {
-  acessToken: string;
+  @IsString()
+  acess_token: string;
 }
