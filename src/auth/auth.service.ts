@@ -40,6 +40,7 @@ export class AuthService {
     });
     return newUser;
   }
+
   async validateUser(email: string, password: string) {
     const user = await this.prisma.user.findUnique({ where: { email } });
     if (!user) throw new UnauthorizedException('Credenciais inválidas');
