@@ -40,4 +40,5 @@ enum placeType {
   RESTAURANTE
   BAR
   HOTEL
+  PETISCARIA
 }
