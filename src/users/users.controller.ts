@@ -41,7 +41,7 @@ export class UsersController {
   @ApiResponse({ status: 200, description: 'Usuários encontrados!' })
   @ApiResponse({ status: 404, description: 'Usuários não encontrados.' })
   @ApiBearerAuth()
-  @Get()
+  @Get('all')
   findAll() {
     return this.userService.findAll();
   }

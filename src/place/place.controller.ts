@@ -9,6 +9,8 @@ import {
   UploadedFiles,
   UseInterceptors,
   BadRequestException,
+  UseGuards,
+  Query,
 } from '@nestjs/common';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
 import { PlaceService } from './place.service';
@@ -20,9 +22,14 @@ import {
   ApiConsumes,
   ApiResponse,
   ApiOperation,
+  ApiBearerAuth,
+  ApiQuery,
 } from '@nestjs/swagger';
 import { UpdatePlaceDto } from './dto/update-place.dto';
+import { JwtAuthGuard } from 'src/auth/jwt.guard';
+import { AdminGuard } from 'src/auth/admin.guard';
 
+@UseGuards(JwtAuthGuard)
 @Controller('places')
 export class PlaceController {
   constructor(
@@ -31,12 +38,26 @@ export class PlaceController {
   ) {}
 
   @ApiOperation({ summary: 'Listar todos os locais' })
-  @Get()
+  @ApiBearerAuth()
+  @Get('all')
   findAll() {
     return this.placeService.findAll();
   }
 
-  @Post()
+  @ApiOperation({ summary: 'Listar locais paginados' })
+  @ApiQuery({ name: 'page', required: false, type: Number, example: 1 })
+  @ApiQuery({ name: 'limit', required: false, type: Number, example: 10 })
+  @ApiBearerAuth()
+  @Get('pagineted')
+  async findPaginated(@Query('page') page = 1, @Query('limit') limit = 10) {
+    const parsePage = Math.max(1, Number(page));
+    const parseLimit = Math.min(50, Math.max(1, Number(limit)));
+    return this.placeService.findPaginated(parsePage, parseLimit);
+  }
+
+  
+  @ApiBearerAuth()
+  @Post('create')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 3 }]))
   @ApiConsumes('multipart/form-data')
   @ApiOperation({ summary: 'Cadastrar novo local com imagens' })
@@ -114,6 +135,7 @@ export class PlaceController {
       },
     },
   })
+  @ApiBearerAuth()
   @ApiResponse({ status: 200, description: 'Place atualizado com sucesso' })
   async updatePlace(
     @Param('id') id: string,
@@ -125,6 +147,7 @@ export class PlaceController {
   }
 
   @Delete(':id')
+  @ApiBearerAuth()
   @ApiOperation({ summary: 'Deletar local e imagens no Cloudinary' })
   @ApiResponse({ status: 200, description: 'Place deletado com sucesso' })
   async deletePlace(@Param('id') id: string) {
