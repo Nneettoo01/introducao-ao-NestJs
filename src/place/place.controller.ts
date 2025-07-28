@@ -29,7 +29,6 @@ import { UpdatePlaceDto } from './dto/update-place.dto';
 import { JwtAuthGuard } from 'src/auth/jwt.guard';
 import { AdminGuard } from 'src/auth/admin.guard';
 
-@UseGuards(JwtAuthGuard)
 @Controller('places')
 export class PlaceController {
   constructor(
@@ -55,7 +54,7 @@ export class PlaceController {
     return this.placeService.findPaginated(parsePage, parseLimit);
   }
 
-  
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiBearerAuth()
   @Post('create')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 3 }]))
@@ -104,6 +103,7 @@ export class PlaceController {
     });
   }
 
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @Put(':id')
   @UseInterceptors(FileFieldsInterceptor([{ name: 'images', maxCount: 3 }]))
   @ApiConsumes('multipart/form-data')
@@ -146,8 +146,9 @@ export class PlaceController {
     return this.placeService.update(id, data, newImages);
   }
 
-  @Delete(':id')
+  @UseGuards(JwtAuthGuard, AdminGuard)
   @ApiBearerAuth()
+  @Delete(':id')
   @ApiOperation({ summary: 'Deletar local e imagens no Cloudinary' })
   @ApiResponse({ status: 200, description: 'Place deletado com sucesso' })
   async deletePlace(@Param('id') id: string) {
