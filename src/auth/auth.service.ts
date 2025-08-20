@@ -63,7 +63,7 @@ export class AuthService {
       credentials.password,
     );
     const payload = {
-      userId: user.id,
+      sub: user.id,
       email: user.email,
       role: user.role,
     };
