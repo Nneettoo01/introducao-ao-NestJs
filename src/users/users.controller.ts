@@ -17,8 +17,7 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { AdminGuard } from 'src/auth/admin.guard';
+import { JwtAuthGuard } from '../auth/jwt.guard';
 
 @UseGuards(JwtAuthGuard)
 @Controller('/user')
@@ -29,13 +28,13 @@ export class UsersController {
     this.userService = userService;
   }
 
-  // @Post()
-  // @ApiOperation({ summary: 'Criar um novo usuário' })
-  // @ApiBody({ type: CreateUserDto })
-  // @ApiResponse({ status: 201, description: 'Usuário criado com sucesso!' })
-  // create(@Body() data: CreateUserDto) {
-  //   return this.userService.create(data);
-  // }
+  @Post()
+  @ApiOperation({ summary: 'Criar um novo usuário' })
+  @ApiBody({ type: CreateUserDto })
+  @ApiResponse({ status: 201, description: 'Usuário criado com sucesso!' })
+  create(@Body() data: CreateUserDto) {
+    return this.userService.create(data);
+  }
 
   @ApiOperation({ summary: 'Listar todos os usuários.' })
   @ApiResponse({ status: 200, description: 'Usuários encontrados!' })
