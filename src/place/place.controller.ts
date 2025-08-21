@@ -26,15 +26,15 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { UpdatePlaceDto } from './dto/update-place.dto';
-import { JwtAuthGuard } from 'src/auth/jwt.guard';
-import { AdminGuard } from 'src/auth/admin.guard';
+import { JwtAuthGuard } from '../auth/jwt.guard';
+import { AdminGuard } from '../auth/admin.guard';
 
 @Controller('places')
 export class PlaceController {
   constructor(
     private placeService: PlaceService,
     private cloudinaryService: CloudinaryService,
-  ) {}
+  ) { }
 
   @ApiOperation({ summary: 'Listar todos os locais' })
   @ApiBearerAuth()
