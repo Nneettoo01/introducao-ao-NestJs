@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { PrismaService } from 'src/prisma/prisma.service';
+import { PrismaService } from '../prisma/prisma.service';
 import { CloudinaryService } from './cloudinary.service';
 import { CreatePlaceDto } from './dto/create-place.dto';
 import { ImageObject } from './types/image-object';
@@ -10,7 +10,7 @@ export class PlaceService {
   constructor(
     private prisma: PrismaService,
     private cloudinaryService: CloudinaryService,
-  ) {}
+  ) { }
   async findAll() {
     return this.prisma.place.findMany();
   }
